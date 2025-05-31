@@ -1,6 +1,7 @@
 // import { ProductChooser } from "./components/swipe/Swipe";
 // import Sidebar from "./components/Sidebar";
 import { Card } from "./components/Card";
+import { Categories } from "./components/Categories";
 const products = [
   {
     model: "C1",
@@ -53,12 +54,28 @@ const products = [
   },
 ];
 
+const categories = [
+  { name: "CARS", img: "/src/assets/categorias/cars.jpg " },
+  { name: "ESTATE", img: "/src/assets/categorias/casa.jpg" },
+  { name: "ALCOHOL", img: "/src/assets/categorias/alcohol.png" },
+  { name: "MOTORCICLES", img: "/src/assets/categorias/motorcicle.jpg" },
+  { name: "MUEBLES", img: "/src/assets/categorias/muebles.jpg" },
+  { name: "COMPUTERS", img: "/src/assets/categorias/computadoras.jpg" },
+  { name: "TOOLS", img: "/src/assets/categorias/tools.jpg" },
+];
 function App() {
   return (
     <div className="w-full px-4 md:px-8 py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-        {products.map((product, index) => (
-          <Card key={index} {...product} />
+      <div className="bg-green-800 p-5 py-8 rounded-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
+          {products.map((product, index) => (
+            <Card key={index} {...product} />
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+        {categories.map((category, index) => (
+          <Categories key={index} {...category} />
         ))}
       </div>
     </div>
