@@ -1,57 +1,55 @@
 @import "tailwindcss";
 
-
-
 @custom-variant dark {
-  selector: '.dark &';
-}/* 3. Default Theme = Solarized Light */
+  selector: ".dark &";
+} /* 3. Default Theme = Solarized Light */
 @theme {
   /* background and surfaces */
-  --color-bg:      #fdf6e3; /* base3 */
-  --color-card:    #eee8d5; /* base2 */
-  --color-border:  #eee8d5;
+  --color-bg: #fdf6e3; /* base3 */
+  --color-card: #eee8d5; /* base2 */
+  --color-border: #eee8d5;
 
   /* text */
-  --color-text:    #657b83; /* base00 */
-  --color-muted:   #93a1a1; /* base1 */
+  --color-text: #657b83; /* base00 */
+  --color-muted: #93a1a1; /* base1 */
 
   /* accent */
-  --color-accent:  #268bd2; /* blue */
+  --color-accent: #268bd2; /* blue */
 }
 
 /* 4. Overrides for Compact Dark under `dark:` */
 @layer base {
   @variant dark {
-    --color-bg:      #121212;
-    --color-card:    #1e1e1e;
-    --color-border:  #2a2a2a;
+    --color-bg: #121212;
+    --color-card: #1e1e1e;
+    --color-border: #2a2a2a;
 
-    --color-text:    #e0e0e0;
-    --color-muted:   #a0a0a0;
+    --color-text: #e0e0e0;
+    --color-muted: #a0a0a0;
 
-    --color-accent:  #64ffda;
+    --color-accent: #64ffda;
   }
 }
 @theme {
   /* Green theme */
   --gradient-a-from: #20d397;
-  --gradient-a-to:   #1fa78e;
+  --gradient-a-to: #1fa78e;
 
   /* Blue theme */
   --gradient-b-from: #48a9fa;
-  --gradient-b-to:   #1d8bf1;
+  --gradient-b-to: #1d8bf1;
 
   /* Purple theme */
   --gradient-c-from: #b266e5;
-  --gradient-c-to:   #9651cb;
+  --gradient-c-to: #9651cb;
 
   /* Orange theme */
   --gradient-d-from: #fa8145;
-  --gradient-d-to:   #e97333;
+  --gradient-d-to: #e97333;
 
   /* Pink theme */
   --gradient-e-from: #fb5480;
-  --gradient-e-to:   #e6376c;
+  --gradient-e-to: #e6376c;
 }
 
 /* 2) Create component classes that pull from those CSS vars */

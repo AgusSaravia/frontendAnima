@@ -1,7 +1,9 @@
 // import { ProductChooser } from "./components/swipe/Swipe";
 // import Sidebar from "./components/Sidebar";
+import AboutUs from "./components/AboutUs";
 import { Card } from "./components/Card";
 import { Categories } from "./components/Categories";
+import Search from "./components/search";
 const products = [
   {
     model: "C1",
@@ -42,16 +44,16 @@ const products = [
     timeLeft: "2h 30m",
     bids: 20,
   },
-  {
-    model: "C3 Aircross",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
+  // {
+  //   model: "C3 Aircross",
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
 
-    imageUrl: "/src/assets/c3aircross.jpg",
-    current: 23990,
-    timeLeft: "2h 30m",
-    bids: 20,
-  },
+  //   imageUrl: "/src/assets/c3aircross.jpg",
+  //   current: 23990,
+  //   timeLeft: "2h 30m",
+  //   bids: 20,
+  // },
 ];
 
 const categories = [
@@ -61,24 +63,35 @@ const categories = [
   { name: "MOTORCICLES", img: "/src/assets/categorias/motorcicle.jpg" },
   { name: "MUEBLES", img: "/src/assets/categorias/muebles.jpg" },
   { name: "COMPUTERS", img: "/src/assets/categorias/computadoras.jpg" },
-  { name: "TOOLS", img: "/src/assets/categorias/tools.jpg" },
+  // { name: "TOOLS", img: "/src/assets/categorias/tools.jpg" },
 ];
 function App() {
   return (
-    <div className="w-full px-4 md:px-8 py-8">
-      <div className="bg-green-800 p-5 py-8 rounded-2xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-          {products.map((product, index) => (
-            <Card key={index} {...product} />
-          ))}
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        {categories.map((category, index) => (
-          <Categories key={index} {...category} />
-        ))}
-      </div>
+    <div>
+      <AboutUs />
     </div>
+    // <div className="w-full max-w-screen-xl mx-auto px-1 md:px-8 py-8">
+    //   <div className="w-full text-center pb-5 ">
+    //     <Search />
+    //   </div>
+    //   <span>
+    //     <h1 className="text-[#485C11] font-roboto text-5xl font-bold mb-3">
+    //       Los mas elegidos hoy:
+    //     </h1>
+    //   </span>
+    //   <div className="bg-[#485C11] p-5 py-8 rounded-2xl">
+    //     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
+    //       {products.map((product, index) => (
+    //         <Card key={index} {...product} />
+    //       ))}
+    //     </div>
+    //   </div>
+    //   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+    //     {categories.map((category, index) => (
+    //       <Categories key={index} {...category} />
+    //     ))}
+    //   </div>
+    // </div>
   );
 }
 
