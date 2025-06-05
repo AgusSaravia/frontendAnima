@@ -1,6 +1,10 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import Sidebar from "./components/Sidebar";
+import NavBar from './components/NavBar';
+import SearchBar from './components/SearchBar';
+import CTASection from './components/CTASection';
+import { Card } from "./components/Card";
+import { Categories } from "./components/Categories";
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -27,66 +31,55 @@ const PublicRoute = () => {
 
 // Layout component for authenticated routes
 const AuthenticatedLayout = () => (
-  <div className="flex justify-between">
-    <Sidebar />
-    <div className="m-auto">
-      <Outlet />
-    </div>
+  <div className="min-h-screen flex flex-col">
+    <NavBar />
+    <SearchBar />
+    <Outlet />
   </div>
 );
 
-// Home component
-
-// Main App component
-// import { ProductChooser } from "./components/swipe/Swipe";
-// import Sidebar from "./components/Sidebar";
-import { Card } from "./components/Card";
-import { Categories } from "./components/Categories";
-const products = [
+// Mock data for featured products
+const featuredProducts = [
   {
+    id: 1,
     model: "C1",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
     imageUrl: "/src/assets/c1.jpg",
     current: 15990,
     timeLeft: "5h 23m",
     bids: 5,
   },
   {
+    id: 2,
     model: "C3",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
-
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
     imageUrl: "/src/assets/c3.jpg",
     current: 18990,
     timeLeft: "4h 10m",
     bids: 8,
   },
   {
+    id: 3,
     model: "C4",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
-
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
     imageUrl: "/src/assets/c4.jpg",
     current: 21990,
     timeLeft: "3h 45m",
     bids: 12,
   },
   {
+    id: 4,
     model: "C5",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
-
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
     imageUrl: "/src/assets/c5.jpg",
     current: 40990,
     timeLeft: "2h 30m",
     bids: 20,
   },
   {
+    id: 5,
     model: "C3 Aircross",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
-
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, asperiores.",
     imageUrl: "/src/assets/c3aircross.jpg",
     current: 23990,
     timeLeft: "2h 30m",
@@ -94,8 +87,9 @@ const products = [
   },
 ];
 
+// Categories data
 const categories = [
-  { name: "CARS", img: "/src/assets/categorias/cars.jpg " },
+  { name: "CARS", img: "/src/assets/categorias/cars.jpg" },
   { name: "ESTATE", img: "/src/assets/categorias/casa.jpg" },
   { name: "ALCOHOL", img: "/src/assets/categorias/alcohol.png" },
   { name: "MOTORCICLES", img: "/src/assets/categorias/motorcicle.jpg" },
@@ -103,10 +97,46 @@ const categories = [
   { name: "COMPUTERS", img: "/src/assets/categorias/computadoras.jpg" },
   { name: "TOOLS", img: "/src/assets/categorias/tools.jpg" },
 ];
+
+// Home component
+const Home = () => (
+  <div className="flex-1">
+    {/** Categories Section **/}
+    <section className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold text-green-700 mb-6">Categorías</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        {categories.map((category, index) => (
+          <Categories key={index} name={category.name} img={category.img} />
+        ))}
+      </div>
+    </section>
+
+    {/** Featured Products Section **/}
+    <section className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold text-green-700 mb-6">Los más elegidos hoy:</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {featuredProducts.map((prod) => (
+          <Card
+            key={prod.id}
+            model={prod.model}
+            description={prod.description}
+            imageUrl={prod.imageUrl}
+            current={prod.current}
+            timeLeft={prod.timeLeft}
+            bids={prod.bids}
+          />
+        ))}
+      </div>
+    </section>
+
+    {/** Call-to-Action Section **/}
+    <CTASection />
+  </div>
+);
+
 function App() {
   return (
-    <>
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <Routes>
         {/* Public routes that redirect if logged in */}
         <Route element={<PublicRoute />}>
@@ -126,23 +156,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
-    <div className="w-full px-4 md:px-8 py-8">
-      <div className="bg-green-800 p-5 py-8 rounded-2xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-          {products.map((product, index) => (
-            <Card key={index} {...product} />
-          ))}
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        {categories.map((category, index) => (
-          <Categories key={index} {...category} />
-        ))}
-      </div>
-    </div>
-    </>
-  ); 
-   
+  );
 }
 
 export default App;
