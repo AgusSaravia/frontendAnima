@@ -157,28 +157,34 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
-    // <div className="w-full max-w-screen-xl mx-auto px-1 md:px-8 py-8">
-    //   <div className="w-full text-center pb-5 ">
-    //     <Search />
-    //   </div>
-    //   <span>
-    //     <h1 className="text-[#485C11] font-roboto text-5xl font-bold mb-3">
-    //       Los mas elegidos hoy:
-    //     </h1>
-    //   </span>
-    //   <div className="bg-[#485C11] p-5 py-8 rounded-2xl">
-    //     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
-    //       {products.map((product, index) => (
-    //         <Card key={index} {...product} />
-    //       ))}
-    //     </div>
-    //   </div>
-    //   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-    //     {categories.map((category, index) => (
-    //       <Categories key={index} {...category} />
-    //     ))}
-    //   </div>
-    // </div>
+    // // <div className="w-full max-w-screen-xl mx-auto px-1 md:px-8 py-8">
+    // //   <div className="w-full text-center pb-5 ">
+    // //     <Search />
+    // //   </div>
+    // //   <span>
+    // //     <h1 className="text-[#485C11] font-roboto text-5xl font-bold mb-3">
+    // //       Los mas elegidos hoy:
+    // //     </h1>
+    // //   </span>
+    // //   <div className="bg-[#485C11] p-5 py-8 rounded-2xl">
+    // //     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
+    // //       {products.map((product, index) => (
+    // //         <Card key={index} {...product} />
+    // //       ))}
+    // //     </div>
+    // //   </div>
+    // //   <Info />
+    // //   <span>
+    // //     <h1 className="mt-10 text-[#485C11] font-roboto text-5xl font-bold mb-3">
+    // //       Categories
+    // //     </h1>
+    // //   </span>
+    // //   <div className=" mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 w-full">
+    // //     {categories.map((category, index) => (
+    // //       <Categories key={index} {...category} />
+    // //     ))}
+    // //   </div>
+    // // </div>
   );
 }
 
