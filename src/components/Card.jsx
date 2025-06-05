@@ -13,7 +13,7 @@ export function Card({
         <img
           src={imageUrl}
           alt={`Image of ${model}`}
-          className="w-full h-48 object-cover p-2  rounded-2xl"
+          className="w-100 h-48 object-cover p-1  rounded-2xl"
         />
 
         <div className="p-4 space-y-2">
