@@ -1,10 +1,10 @@
 export function AboutUs() {
   return (
-    <div className="bg-[url('./assets/Montaña.png')] bg-cover bg-center bg-fixed h-screen">
+    <div className="bg-[url('./assets/Montañita_svg.svg')] bg-[50%_-180%] h-full bg-no-repeat h-screen bg-fixed">
       <div className="min-h-screen flex justify-center px-4 py-10">
         <div className="max-w-5xl w-full">
           <h1
-            className="text-white text-5xl font-extrabold text-center 
+            className="text-white mt-20 text-5xl font-extrabold text-center 
             [text-shadow:_-1px_-1px_0_#000,_1px_-1px_0_#000,_-1px_1px_0_#000,_1px_1px_0_#000] mb-8"
           >
             Sobre este Proyecto
