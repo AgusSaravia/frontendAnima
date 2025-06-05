@@ -2,7 +2,7 @@ export function Info() {
   return (
     <div className="flex overflow-hidden mt-10">
       <div className="w-1/2  flex items-center justify-center p-8">
-        <span className="text-[#485C11] font-extrabold text-5xl text-center">
+        <span className="text-[#485C11] font-bold text-5xl ">
           Make your automatic offer and participate in the best opportunities
           with a single click.
         </span>
