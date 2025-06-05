@@ -1,14 +1,19 @@
-// src/components/LoginPage.jsx
+// src/components/RegisterPage.jsx
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+const RegisterPage = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
-  const navigate = useNavigate();
+  const navigate   = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,22 +23,34 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!formData.email || !formData.password) {
-      setError('Email y contraseña son obligatorios');
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
       return;
     }
     try {
       setIsLoading(true);
-      const result = await login(formData.email, formData.password);
-      if (result.success) {
-        const user = JSON.parse(localStorage.getItem('user'));
-        navigate(user?.role === 'admin' ? '/dashboard' : '/');
+      const response = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al registrar usuario');
+      }
+      const loginResult = await login(formData.email, formData.password);
+      if (loginResult.success) {
+        navigate('/');
       } else {
-        setError(result.message || 'Error al iniciar sesión. Intenta nuevamente.');
+        navigate('/login');
       }
     } catch (err) {
-      setError('Ocurrió un error inesperado. Intenta nuevamente.');
-      console.error('Login error:', err);
+      setError(err.message || 'Error en el registro. Intenta nuevamente.');
+      console.error('Registration error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +67,7 @@ const LoginPage = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-50 p-6 md:p-8">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 md:p-8">
           <h2 className="text-2xl md:text-3xl font-bold text-[#3D520D] mb-6 text-center">
-            Inicia sesión
+            Crea tu cuenta
           </h2>
           {error && (
             <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
@@ -78,6 +95,21 @@ const LoginPage = () => {
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
+                <label htmlFor="username" className="sr-only">Nombre</label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  className="appearance-none rounded-t-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
+                  placeholder="Nombre"
+                  value={formData.username}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                />
+              </div>
+              <div>
                 <label htmlFor="email" className="sr-only">Email</label>
                 <input
                   id="email"
@@ -85,7 +117,7 @@ const LoginPage = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none rounded-t-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
+                  className="appearance-none rounded-none block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
@@ -98,33 +130,29 @@ const LoginPage = () => {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
-                  className="appearance-none rounded-b-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
+                  className="appearance-none rounded-none block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
                   placeholder="Contraseña"
                   value={formData.password}
                   onChange={handleChange}
                   disabled={isLoading}
                 />
               </div>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center">
+              <div>
+                <label htmlFor="confirmPassword" className="sr-only">Confirmar contraseña</label>
                 <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-[#3D520D] focus:ring-[#3D520D] border-gray-300 rounded"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className="appearance-none rounded-b-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#3D520D] focus:border-[#3D520D] focus:z-10 sm:text-sm bg-gray-100"
+                  placeholder="Confirmar contraseña"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   disabled={isLoading}
                 />
-                <label htmlFor="remember-me" className="ml-2 text-gray-900">
-                  Recuérdame
-                </label>
-              </div>
-              <div>
-                <a href="#" className="font-medium text-[#3D520D] hover:text-green-700">
-                  ¿Olvidaste tu contraseña?
-                </a>
               </div>
             </div>
             <button
@@ -154,14 +182,14 @@ const LoginPage = () => {
                   ></path>
                 </svg>
               ) : (
-                'Inicia sesión'
+                'Crear cuenta'
               )}
             </button>
           </form>
           <p className="mt-4 md:mt-6 text-center text-sm text-gray-600">
-            ¿No tienes cuenta?{' '}
-            <Link to="/register" className="font-medium text-[#3D520D] hover:text-green-700">
-              Crear cuenta
+            ¿Ya tienes cuenta?{' '}
+            <Link to="/login" className="font-medium text-[#3D520D] hover:text-green-700">
+              Inicia sesión
             </Link>
           </p>
         </div>
@@ -170,4 +198,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
