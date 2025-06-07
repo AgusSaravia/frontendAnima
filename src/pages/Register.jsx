@@ -12,7 +12,7 @@ const RegisterPage = () => {
   });
   const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { registerUser } = useAuth();
   const navigate   = useNavigate();
 
   const handleChange = (e) => {
@@ -29,24 +29,15 @@ const RegisterPage = () => {
     }
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al registrar usuario');
-      }
-      const loginResult = await login(formData.email, formData.password);
-      if (loginResult.success) {
+      const result = await registerUser(
+        formData.username,
+        formData.email,
+        formData.password
+      );
+      if (result.success) {
         navigate('/');
       } else {
-        navigate('/login');
+        setError(result.message || 'Error al registrar usuario');
       }
     } catch (err) {
       setError(err.message || 'Error en el registro. Intenta nuevamente.');

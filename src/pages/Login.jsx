@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,7 +24,7 @@ const LoginPage = () => {
     }
     try {
       setIsLoading(true);
-      const result = await login(formData.email, formData.password);
+      const result = await loginUser(formData.email, formData.password);
       if (result.success) {
         const user = JSON.parse(localStorage.getItem('user'));
         navigate(user?.role === 'admin' ? '/dashboard' : '/');
