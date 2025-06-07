@@ -93,7 +93,7 @@ const categories = [
   { name: "CARS", img: "/src/assets/categorias/cars.jpg" },
   { name: "ESTATE", img: "/src/assets/categorias/casa.jpg" },
   { name: "ALCOHOL", img: "/src/assets/categorias/alcohol.png" },
-  { name: "MOTORCICLES", img: "/src/assets/categorias/motorcicle.jpg" },
+  { name: "MOTORCYCLES", img: "/src/assets/categorias/motorcycle.jpg" },
   { name: "MUEBLES", img: "/src/assets/categorias/muebles.jpg" },
   { name: "COMPUTERS", img: "/src/assets/categorias/computadoras.jpg" },
   // { name: "TOOLS", img: "/src/assets/categorias/tools.jpg" },
