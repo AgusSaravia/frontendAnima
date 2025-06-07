@@ -135,6 +135,7 @@ export function AboutUs() {
               <li>Discord</li>
             </ul>
           </div>
+          <div></div>
         </div>
       </div>
     </div>
