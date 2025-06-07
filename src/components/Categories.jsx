@@ -1,5 +1,3 @@
-import React from "react";
-
 export function Categories({ name, img }) {
   return (
     <div className="relative w-full h-48 rounded-2xl overflow-hidden">
