@@ -7,6 +7,7 @@ import { Card } from "./components/Card";
 import { Categories } from "./components/Categories";
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AboutUs from "./components/AboutUs";
 
 // Protected route component
 const ProtectedRoute = () => {
