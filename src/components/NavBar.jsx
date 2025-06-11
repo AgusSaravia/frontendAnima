@@ -1,9 +1,19 @@
 {/** Imports **/}
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../features/auth/authSlice';
 // import logoImg from '../assets/suby-logo.png';
 
 {/** Component Definition **/}
 export default function NavBar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, currentUser } = useSelector((state) => state.auth);
+
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+    navigate('/login'); // Redirect to login page after logout
+  };
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -47,14 +57,26 @@ export default function NavBar() {
           </li>
         </ul>
 
-        {/** Login Button **/}
+        {/** Login/Logout Button & User Info **/}
         <div className="flex items-center space-x-4">
-          <Link
-            to="/login"
-            className="px-4 py-2 bg-[#3D520D] text-white rounded-full hover:bg-opacity-90 transition"
-          >
-            Login
-          </Link>
+          {isAuthenticated && currentUser ? (
+            <>
+              <span className="text-gray-700 font-medium">Hola, {currentUser.username}!</span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-[#3D520D] text-white rounded-full hover:bg-opacity-90 transition"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/** Mobile Menu Button **/}

@@ -1,7 +1,8 @@
 // src/components/RegisterPage.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../features/auth/authSlice';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const RegisterPage = () => {
   });
   const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const dispatch = useDispatch();
   const navigate   = useNavigate();
 
   const handleChange = (e) => {
@@ -42,11 +43,21 @@ const RegisterPage = () => {
       if (!response.ok) {
         throw new Error(data.message || 'Error al registrar usuario');
       }
-      const loginResult = await login(formData.email, formData.password);
-      if (loginResult.success) {
-        navigate('/');
-      } else {
-        navigate('/login');
+      // Registration was successful, now try to log the user in automatically
+      try {
+        const actionResult = await dispatch(loginUser({ email: formData.email, password: formData.password }));
+        if (loginUser.fulfilled.match(actionResult)) {
+          // Auto-login successful, navigate based on role
+          const loggedInUser = actionResult.payload.user;
+          navigate(loggedInUser.role === 'admin' ? '/dashboard' : '/');
+        } else {
+          // Auto-login failed after registration, redirect to login page with a success message for registration
+          navigate('/login?success=Registration%20successful!%20Please%20log%20in.');
+        }
+      } catch (loginError) {
+        // Catch error from dispatching loginUser itself (e.g. network error before thunk handles it)
+        console.error('Auto-login after registration failed:', loginError);
+        navigate('/login?success=Registration%20successful!%20Please%20log%20in.');
       }
     } catch (err) {
       setError(err.message || 'Error en el registro. Intenta nuevamente.');

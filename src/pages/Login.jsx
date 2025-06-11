@@ -1,43 +1,99 @@
-// src/components/LoginPage.jsx
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+/**
+ * Login Page Component
+ * 
+ * Handles user authentication with email and password using the AuthContext.
+ * Displays appropriate feedback messages for success, errors, and loading states.
+ */
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, clearAuthError } from '../features/auth/authSlice';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  // Local success message for registration redirect, error and isLoading will come from Redux
+  const [successMessage, setSuccessMessage] = useState(''); 
+  const dispatch = useDispatch();
+  const { isAuthenticated, currentUser, isLoading, error: authError } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for redirect params
+  useEffect(() => {
+    // Check if we have a success message from registration
+    const params = new URLSearchParams(location.search);
+    const successMsgParam = params.get('success');
+    if (successMsgParam) {
+      setSuccessMessage(decodeURIComponent(successMsgParam));
+    }
+    // Clear any auth errors when component mounts or location changes
+    dispatch(clearAuthError());
+    
+    // If already authenticated, redirect to appropriate page
+    if (isAuthenticated && currentUser) {
+      navigate(currentUser.role === 'admin' ? '/dashboard' : '/');
+    }
+  }, [location, isAuthenticated, currentUser, navigate, dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear auth error from Redux store and local success message when user starts typing again
+    if (authError) dispatch(clearAuthError());
+    if (successMessage) setSuccessMessage('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    dispatch(clearAuthError());
+    setSuccessMessage('');
+
     if (!formData.email || !formData.password) {
-      setError('Email y contraseña son obligatorios');
-      return;
+      // For simple validation errors like this, we can still use local state
+      // or dispatch a specific action if we want to handle all errors via Redux.
+      // For now, let's keep it simple and assume Redux error state is for API errors.
+      // However, the authError from Redux will be displayed, so we might not need local setError.
+      // Let's dispatch an action to set a generic form error if needed, or rely on authError.
+      // For now, we'll let the thunk handle the error reporting.
+      // A better approach for form validation would be a library like Formik/Yup or react-hook-form.
+      // We'll assume the backend handles this validation and returns an error.
     }
+
     try {
-      setIsLoading(true);
-      const result = await login(formData.email, formData.password);
-      if (result.success) {
-        const user = JSON.parse(localStorage.getItem('user'));
-        navigate(user?.role === 'admin' ? '/dashboard' : '/');
-      } else {
-        setError(result.message || 'Error al iniciar sesión. Intenta nuevamente.');
+      // loginUser thunk already sets isLoading to true
+      const actionResult = await dispatch(loginUser({ email: formData.email, password: formData.password }));
+      // unwrapResult can be used to get payload or throw error
+      // import { unwrapResult } from '@reduxjs/toolkit';
+      // const userPayload = unwrapResult(actionResult);
+
+      // After dispatching, the useEffect for navigation will handle redirection
+      // based on the updated isAuthenticated and currentUser state from Redux.
+      // The loginUser.fulfilled case in authSlice updates these.
+      // If loginUser is rejected, authError in Redux state will be set.
+
+      // Check if login was successful by inspecting the action result if not using unwrapResult
+      if (loginUser.fulfilled.match(actionResult)) {
+        // Navigation is handled by the useEffect hook reacting to isAuthenticated & currentUser changes
+        // No explicit navigation here is needed if that useEffect is robust.
+        // The user object for role check will come from actionResult.payload.user or Redux state.
+        const loggedInUser = actionResult.payload.user;
+        navigate(loggedInUser.role === 'admin' ? '/dashboard' : '/');
+      } else if (loginUser.rejected.match(actionResult)){
+        // Error is already set in Redux state by the thunk's rejected case
+        // The UI will display authError from Redux store.
+        // No need to call setError locally.
       }
+
     } catch (err) {
-      setError('Ocurrió un error inesperado. Intenta nuevamente.');
-      console.error('Login error:', err);
-    } finally {
-      setIsLoading(false);
+      // This catch block is for unexpected errors during dispatch or if unwrapResult throws.
+      // The thunk itself should catch API errors and use rejectWithValue.
+      // If an error reaches here, it's likely a programming error.
+      console.error('Login dispatch error:', err);
+      // Optionally dispatch an action to set a generic error message in Redux state
     }
+    // isLoading is managed by the thunk (pending/fulfilled/rejected)
   };
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -52,7 +108,13 @@ const LoginPage = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-[#3D520D] mb-6 text-center">
             Inicia sesión
           </h2>
-          {error && (
+          {/* Display local success message or Redux auth error */}
+          {successMessage && (
+            <div className="mb-4 bg-green-50 border-l-4 border-green-400 p-4">
+              <p className="text-sm text-green-700">{successMessage}</p>
+            </div>
+          )}
+          {authError && (
             <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -70,7 +132,7 @@ const LoginPage = () => {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
+                  <p className="text-sm text-red-700">{typeof authError === 'string' ? authError : 'Error desconocido'}</p>
                 </div>
               </div>
             </div>
